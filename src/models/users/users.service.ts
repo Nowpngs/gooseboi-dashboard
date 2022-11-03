@@ -9,4 +9,8 @@ export class UsersService {
   create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({ data: createUserDto });
   }
+
+  findAll() {
+    return this.prisma.user.findMany({ where: { deleted: false } });
+  }
 }

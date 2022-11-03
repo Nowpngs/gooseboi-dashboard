@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnprocessableEntityResponse,
@@ -21,5 +22,13 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @ApiOkResponse({ description: 'The resources were returned successfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiOperation({ summary: 'get all the active user' })
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
   }
 }
