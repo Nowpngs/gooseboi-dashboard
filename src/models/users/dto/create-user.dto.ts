@@ -17,12 +17,12 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  password: string;
+  password?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  name: string;
+  name?: string;
 
   @IsEnum(Role)
   @ApiProperty()
