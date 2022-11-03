@@ -7,6 +7,7 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 
@@ -20,7 +21,7 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiOperation({ summary: 'create the user' })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
@@ -28,7 +29,7 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiOperation({ summary: 'get all the active user' })
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(): Promise<User[]> {
+    return await this.usersService.findAll();
   }
 }
