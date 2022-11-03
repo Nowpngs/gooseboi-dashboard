@@ -14,4 +14,8 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return await this.prisma.user.findMany({ where: { deleted: false } });
   }
+
+  async findOne(id: number): Promise<User> {
+    return await this.prisma.user.findUnique({ where: { id } });
+  }
 }

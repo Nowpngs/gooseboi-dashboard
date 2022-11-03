@@ -76,4 +76,8 @@ describe('UsersController', () => {
       expect(mockUserFindAll).toHaveBeenCalled();
     });
   });
+
+  describe('fineOne', () => {
+    it.todo('should return one user');
+  });
 });

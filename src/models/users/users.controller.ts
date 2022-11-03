@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -31,5 +32,14 @@ export class UsersController {
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
+  }
+
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @ApiOperation({ summary: 'find the user by id' })
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.usersService.findOne(+id);
   }
 }
