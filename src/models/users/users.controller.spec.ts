@@ -9,8 +9,8 @@ describe('UsersController', () => {
   let controller: UsersController;
 
   const mockUsersService = {
-    findAll: jest.fn(),
-    create: jest.fn(),
+    findAllUser: jest.fn(),
+    createUser: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -46,9 +46,9 @@ describe('UsersController', () => {
         deleted: faker.datatype.boolean(),
       };
       const mockCreateUser = jest
-        .spyOn(mockUsersService, 'create')
+        .spyOn(mockUsersService, 'createUser')
         .mockResolvedValue(expectResult);
-      await expect(controller.create(createUserDto)).resolves.toEqual(
+      await expect(controller.createUser(createUserDto)).resolves.toEqual(
         expectResult,
       );
       expect(mockCreateUser).toHaveBeenCalled();
@@ -70,9 +70,9 @@ describe('UsersController', () => {
         },
       ];
       const mockUserFindAll = jest
-        .spyOn(mockUsersService, 'findAll')
+        .spyOn(mockUsersService, 'findAllUser')
         .mockResolvedValue(expectResult);
-      await expect(controller.findAll()).resolves.toEqual(expectResult);
+      await expect(controller.findAllUser()).resolves.toEqual(expectResult);
       expect(mockUserFindAll).toHaveBeenCalled();
     });
   });

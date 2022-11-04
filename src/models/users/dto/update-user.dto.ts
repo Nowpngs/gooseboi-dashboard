@@ -11,11 +11,6 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  password?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
   name?: string;
 
   @IsEnum(Role)
