@@ -13,7 +13,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },
     });
     if (user) {
@@ -39,7 +39,7 @@ export class UsersService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    return this.prisma.user.update({
+    return await this.prisma.user.update({
       where: { id },
       data: updateUserDto,
     });
@@ -97,5 +97,9 @@ export class UsersService {
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
     }
     return user;
+  }
+
+  async findUserByEmail(email: string): Promise<User> {
+    return await this.prisma.user.findUnique({ where: { email: email } });
   }
 }
