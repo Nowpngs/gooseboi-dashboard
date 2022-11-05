@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 const saltOrRound = 10;
 @Injectable()
@@ -12,6 +13,12 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const user = this.prisma.user.findUnique({
+      where: { email: createUserDto.email },
+    });
+    if (user) {
+      throw new HttpException('User Already Exist', HttpStatus.CONFLICT);
+    }
     if (createUserDto.password) {
       createUserDto.password = await bcrypt.hash(
         createUserDto.password,
@@ -26,7 +33,9 @@ export class UsersService {
   }
 
   async findOneUser(id: number): Promise<User> {
-    return await this.prisma.user.findUnique({ where: { id } });
+    return await this.prisma.user.findUnique({
+      where: { id: id },
+    });
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
@@ -71,5 +80,22 @@ export class UsersService {
         password: await bcrypt.hash(newPassword, saltOrRound),
       },
     });
+  }
+
+  async findUserLogin(loginUserDto: LoginUserDto): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: loginUserDto.email },
+    });
+    if (!user || user.deleted) {
+      throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
+    }
+    const isCorrect = await bcrypt.compare(
+      loginUserDto.password,
+      user.password,
+    );
+    if (!isCorrect) {
+      throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
   }
 }
