@@ -16,6 +16,7 @@ import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/models/users/dto/login-user.dto';
 import { UserEntity } from 'src/models/users/entities/users.entity';
 import { AuthService } from './auth.service';
+import { LoginStatus } from './interfaces/login-status.interface';
 import { RegistrationStatus } from './interfaces/registration-status.interface';
 
 @ApiTags('Auth')
@@ -40,11 +41,12 @@ export class AuthController {
     return result;
   }
 
+  @ApiCreatedResponse({ description: 'Created Succesfully' })
   @ApiUnauthorizedResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiOperation({ summary: 'get the jwt token' })
   @Post('login')
-  async userLogin(@Body() loginUserDto: LoginUserDto): Promise<any> {
+  async userLogin(@Body() loginUserDto: LoginUserDto): Promise<LoginStatus> {
     return await this.authService.userLogin(loginUserDto);
   }
 }
