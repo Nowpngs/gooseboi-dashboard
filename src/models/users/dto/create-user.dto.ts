@@ -15,9 +15,9 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  password?: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  password: string;
 
   @IsString()
   @IsOptional()
