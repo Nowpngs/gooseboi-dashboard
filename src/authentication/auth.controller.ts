@@ -13,9 +13,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
-import { CreateUserDto } from 'src/models/users/dto/create-user.dto';
-import { LoginUserDto } from 'src/models/users/dto/login-user.dto';
-import { UserEntity } from 'src/models/users/entities/users.entity';
+import { CreateUserDto } from '../models/users/dto/create-user.dto';
+import { LoginUserDto } from '../models/users/dto/login-user.dto';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginStatus } from './interfaces/login-status.interface';
