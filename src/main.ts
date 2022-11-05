@@ -12,6 +12,16 @@ async function bootstrap() {
     .setTitle('Gooseboi')
     .setDescription('The Gooseboi API description')
     .setVersion('0.1')
+    .addBearerAuth(
+      {
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

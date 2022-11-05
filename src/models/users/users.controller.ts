@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -17,6 +19,7 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/users.entity';
@@ -31,6 +34,8 @@ export class UsersController {
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiOperation({ summary: 'create the user' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
@@ -42,6 +47,8 @@ export class UsersController {
     description: 'The resources were returned successfully',
   })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'get all the active user' })
   @Get()
   async findAllUser(): Promise<User[]> {
@@ -55,6 +62,8 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiNotFoundResponse({ description: 'Resource not found' })
   @ApiOperation({ summary: 'find the user by id' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Get(':id')
   async findOneUser(@Param('id') id: string) {
     return await this.usersService.findOneUser(+id);
@@ -68,6 +77,8 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiOperation({ summary: 'update the user by id' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Patch(':id')
   async updateUser(
     @Param('id') id: string,
@@ -83,6 +94,8 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiNotFoundResponse({ description: 'Resource not found' })
   @ApiOperation({ summary: 'soft delete user by id' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Delete(':id')
   async removeUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.removeUser(+id);
