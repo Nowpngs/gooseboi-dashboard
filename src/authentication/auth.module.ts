@@ -6,6 +6,7 @@ import { UsersService } from '../models/users/users.service';
 import { PrismaService } from '../models/prisma/prisma.service';
 import * as dotenv from 'dotenv';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jtw.strategy';
 dotenv.config();
 
 @Module({
@@ -21,7 +22,7 @@ dotenv.config();
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, PrismaService],
+  providers: [AuthService, UsersService, PrismaService, JwtStrategy],
   exports: [PassportModule, JwtModule],
 })
 export class AuthModule {}

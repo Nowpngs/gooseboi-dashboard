@@ -32,7 +32,7 @@ export class AuthController {
   async userRegister(
     @Body() createUserDto: CreateUserDto,
   ): Promise<RegistrationStatus> {
-    const result: RegistrationStatus = await this.authService.userRegister(
+    const result: RegistrationStatus = await this.authService.register(
       createUserDto,
     );
     if (!result.success) {
@@ -47,6 +47,6 @@ export class AuthController {
   @ApiOperation({ summary: 'get the jwt token' })
   @Post('login')
   async userLogin(@Body() loginUserDto: LoginUserDto): Promise<LoginStatus> {
-    return await this.authService.userLogin(loginUserDto);
+    return await this.authService.login(loginUserDto);
   }
 }

@@ -16,9 +16,7 @@ export class AuthService {
     private readonly userService: UsersService,
   ) {}
 
-  async userRegister(
-    createUserDto: CreateUserDto,
-  ): Promise<RegistrationStatus> {
+  async register(createUserDto: CreateUserDto): Promise<RegistrationStatus> {
     let status: RegistrationStatus = {
       success: true,
       message: 'Account Create Success',
@@ -34,7 +32,7 @@ export class AuthService {
     return status;
   }
 
-  async userLogin(loginUserDto: LoginUserDto): Promise<LoginStatus> {
+  async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {
     const user = await this.userService.findUserLogin(loginUserDto);
     const token: JwtToken = this._createToken(loginUserDto.email);
     return { ...token, data: user };
@@ -49,7 +47,7 @@ export class AuthService {
     };
   }
 
-  async userValidate(jwtPayload: JwtPayload): Promise<User> {
+  async validate(jwtPayload: JwtPayload): Promise<User> {
     const user = await this.userService.findUserByEmail(jwtPayload.email);
     if (!user) {
       throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
