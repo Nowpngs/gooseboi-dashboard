@@ -3,10 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  Request,
   Param,
   Patch,
   Post,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,12 +20,15 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
+import { HasRole } from '../../common/decorators/role/role.decorator';
+import { RoleGuard } from '../../common/guards/role.guard';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/users.entity';
 import { UsersService } from './users.service';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -34,7 +39,8 @@ export class UsersController {
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiOperation({ summary: 'create the user' })
-  @UseGuards(JwtAuthGuard)
+  @HasRole(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -47,7 +53,8 @@ export class UsersController {
     description: 'The resources were returned successfully',
   })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  @UseGuards(JwtAuthGuard)
+  @HasRole(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'get all the active user' })
   @Get()
@@ -62,7 +69,8 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiNotFoundResponse({ description: 'Resource not found' })
   @ApiOperation({ summary: 'find the user by id' })
-  @UseGuards(JwtAuthGuard)
+  @HasRole(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Get(':id')
   async findOneUser(@Param('id') id: string) {
@@ -77,7 +85,8 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiOperation({ summary: 'update the user by id' })
-  @UseGuards(JwtAuthGuard)
+  @HasRole(Role.ADMIN, Role.USER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Patch(':id')
   async updateUser(
@@ -94,10 +103,30 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiNotFoundResponse({ description: 'Resource not found' })
   @ApiOperation({ summary: 'soft delete user by id' })
-  @UseGuards(JwtAuthGuard)
+  @HasRole(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Delete(':id')
   async removeUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.removeUser(+id);
+  }
+
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'The resource was updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
+  @ApiOperation({ summary: 'update password for user' })
+  @HasRole(Role.ADMIN, Role.USER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth('access-token')
+  @Put('update-password')
+  async updateUserPassword(
+    @Request() req,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> {
+    return this.usersService.updateUserPassword(req.user.id, updatePasswordDto);
   }
 }
