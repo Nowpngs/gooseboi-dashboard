@@ -3,10 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  Request,
   Param,
   Patch,
   Post,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -26,6 +28,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/users.entity';
 import { UsersService } from './users.service';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -106,5 +109,24 @@ export class UsersController {
   @Delete(':id')
   async removeUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.removeUser(+id);
+  }
+
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'The resource was updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
+  @ApiOperation({ summary: 'update password for user' })
+  @HasRole(Role.ADMIN, Role.USER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth('access-token')
+  @Put('update-password')
+  async updateUserPassword(
+    @Request() req,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> {
+    return this.usersService.updateUserPassword(req.user.id, updatePasswordDto);
   }
 }
