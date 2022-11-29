@@ -73,7 +73,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Get(':id')
-  async findOneUser(@Param('id') id: string) {
+  async findOneUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.findOneUser(+id);
   }
 
@@ -92,7 +92,7 @@ export class UsersController {
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
+  ): Promise<User> {
     return await this.usersService.updateUser(+id, updateUserDto);
   }
 
