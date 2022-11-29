@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -45,6 +46,11 @@ export class UsersController {
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Get('paginate')
+  async getPaginateUsers(@Query('page') page: number): Promise<any> {
+    return page;
   }
 
   @ApiOkResponse({
