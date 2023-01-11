@@ -93,4 +93,12 @@ export class UsersService {
   async findUserByEmail(email: string): Promise<User> {
     return await this.prisma.user.findUnique({ where: { email: email } });
   }
+
+  async getPaginateUser(limit: number, page: number): Promise<User[]> {
+    return await this.prisma.user.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      where: { deleted: false },
+    });
+  }
 }
