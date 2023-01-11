@@ -9,6 +9,8 @@ import {
   Post,
   UseGuards,
   Put,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -46,6 +48,23 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
+  @ApiOkResponse({
+    type: UserEntity,
+    isArray: true,
+    description: 'The resources were returned successfully',
+  })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiOperation({ summary: 'get the pagination of active user' })
+  @HasRole(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth('access-token')
+  @Get('paginate')
+  async getPaginateUsers(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+  ): Promise<User[]> {
+    return this.usersService.getPaginateUser(limit, page);
+  }
 
   @ApiOkResponse({
     type: UserEntity,
@@ -73,7 +92,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth('access-token')
   @Get(':id')
-  async findOneUser(@Param('id') id: string) {
+  async findOneUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.findOneUser(+id);
   }
 
@@ -92,7 +111,7 @@ export class UsersController {
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
+  ): Promise<User> {
     return await this.usersService.updateUser(+id, updateUserDto);
   }
 
