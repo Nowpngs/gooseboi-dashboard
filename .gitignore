@@ -1,7 +1,12 @@
 # compiled output
+.DS_Store
 dist/
 node_modules/
+
+# local env files
 .env
+.env.local
+.env.*.local
 
 # Logs
 logs
@@ -11,6 +16,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+pnpm-debug.log*
 
 # OS
 .DS_Store
@@ -25,6 +31,11 @@ lerna-debug.log*
 .classpath
 .c9/
 *.launch
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 .settings/
 *.sublime-workspace
 
