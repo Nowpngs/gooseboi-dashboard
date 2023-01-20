@@ -5,9 +5,17 @@ import { PrismaModule } from './models/prisma/prisma.module';
 import { UsersModule } from './models/users/users.module';
 import { AuthModule } from './authentication/auth.module';
 import { ArtistsModule } from './models/artists/artists.module';
+import { AlbumsModule } from './models/albums/albums.module';
 
+const importModules = [
+  PrismaModule,
+  UsersModule,
+  AuthModule,
+  ArtistsModule,
+  AlbumsModule,
+];
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, ArtistsModule],
+  imports: importModules,
   controllers: [AppController],
   providers: [AppService],
 })

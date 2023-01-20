@@ -14,7 +14,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RoleGuard } from '../../common/guards/role.guard';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { ArtiestNameListEntity } from './entities/artist-name-list.entity';
+import { ArtistNameListEntity } from './entities/artist-name-list.entity';
 import { ArtistEntity } from './entities/artists.entity';
 import { ArtistNameList } from './interface/artist-name-list.interface';
 
@@ -39,7 +39,7 @@ export class ArtistsController {
   }
 
   @ApiOkResponse({
-    type: ArtiestNameListEntity,
+    type: ArtistNameListEntity,
     isArray: true,
     description: 'The resources were returned successfully',
   })

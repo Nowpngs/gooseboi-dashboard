@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ArtiestNameListEntity {
+export class ArtistNameListEntity {
   @ApiProperty()
   id: number;
 
