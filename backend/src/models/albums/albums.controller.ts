@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  ParseIntPipe,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -56,9 +48,12 @@ export class AlbumsController {
   @ApiOperation({ summary: 'get all the album (with artist filter)' })
   @Get()
   async findAllAlbum(@Query('artist_id') artistId: string): Promise<Album[]> {
+    // Check if a specific artist id was passed in
     if (!artistId) {
+      // If not, return all albums
       return await this.albumsService.findAllAlbums();
     }
+    // Otherwise, return albums from a specific artist
     return await this.albumsService.getAlbumListFromArtist(parseInt(artistId));
   }
 }
