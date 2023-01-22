@@ -6,6 +6,7 @@ import { UsersModule } from './models/users/users.module';
 import { AuthModule } from './authentication/auth.module';
 import { ArtistsModule } from './models/artists/artists.module';
 import { AlbumsModule } from './models/albums/albums.module';
+import { TracksModule } from './models/tracks/tracks.module';
 
 const importModules = [
   PrismaModule,
@@ -13,6 +14,7 @@ const importModules = [
   AuthModule,
   ArtistsModule,
   AlbumsModule,
+  TracksModule,
 ];
 @Module({
   imports: importModules,
