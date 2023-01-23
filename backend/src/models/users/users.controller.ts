@@ -31,6 +31,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/users.entity';
 import { UsersService } from './users.service';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { PaginateUser } from './interface/paginate-user.interface';
 
 @ApiTags('Users')
 @Controller('users')
@@ -62,7 +63,7 @@ export class UsersController {
   async getPaginateUsers(
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
-  ): Promise<User[]> {
+  ): Promise<PaginateUser> {
     return this.usersService.getPaginateUser(limit, page);
   }
 
