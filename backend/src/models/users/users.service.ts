@@ -13,16 +13,19 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    // Check if user already exists
     const user = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },
     });
     if (user) {
       throw new HttpException('User Already Exist', HttpStatus.CONFLICT);
     }
+    // Hash password
     createUserDto.password = await bcrypt.hash(
       createUserDto.password,
       saltOrRound,
     );
+    // Create user
     return await this.prisma.user.create({ data: createUserDto });
   }
 
@@ -54,10 +57,12 @@ export class UsersService {
     id: number,
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
+    // Find the user by id
     const user = await this.findOneUser(id);
     if (!user) {
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
     }
+    // Check if the old password matches the current password
     const isCorrect = await bcrypt.compare(
       updatePasswordDto.oldPassword,
       user.password,
@@ -65,6 +70,7 @@ export class UsersService {
     if (!isCorrect) {
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
     }
+    // Update the password and return the updated user
     return await this.prisma.user.update({
       where: { id: id },
       data: {
@@ -74,19 +80,24 @@ export class UsersService {
   }
 
   async findUserLogin(loginUserDto: LoginUserDto): Promise<User> {
+    // Find the user by email
     const user = await this.prisma.user.findUnique({
       where: { email: loginUserDto.email },
     });
+    // If the user is not found or has been deleted, return an error
     if (!user || user.deleted) {
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
     }
+    // Compare the password provided with the password stored in the database
     const isCorrect = await bcrypt.compare(
       loginUserDto.password,
       user.password,
     );
+    // If the password is not correct, return an error
     if (!isCorrect) {
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
     }
+    // If the user was found and the password is correct, return the user
     return user;
   }
 

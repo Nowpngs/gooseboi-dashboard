@@ -33,16 +33,20 @@ export class AuthController {
   async userRegister(
     @Body() registerUserDto: RegisterUserDto,
   ): Promise<RegistrationStatus> {
+    // Create a new user object from the input data
     const createUserDto: CreateUserDto = {
       ...registerUserDto,
       role: Role.USER,
     };
+    // Call the registration service
     const result: RegistrationStatus = await this.authService.register(
       createUserDto,
     );
+    // If an error occurs, throw an exception
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
+    // If registration was successful, return the status object
     return result;
   }
 

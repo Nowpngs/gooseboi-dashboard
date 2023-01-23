@@ -25,3 +25,37 @@ enum Role {
   USER
   ADMIN
 }
+
+model Artist {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  albums      Album[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  deleted     Boolean  @default(false)
+}
+
+model Album {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  releasedDate  DateTime?
+  albumCoverUrl String?
+  artist        Artist[]
+  track         Track[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  deleted       Boolean   @default(false)
+}
+
+model Track {
+  id          Int      @id @default(autoincrement())
+  title       String
+  trackNumber Int
+  duration    Float?
+  album       Album    @relation(fields: [albumId], references: [id])
+  albumId     Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  deleted     Boolean  @default(false)
+}
