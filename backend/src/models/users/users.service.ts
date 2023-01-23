@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { PaginateUser } from './interface/paginate-user.interface';
 
 const saltOrRound = 10;
 @Injectable()
@@ -105,11 +106,19 @@ export class UsersService {
     return await this.prisma.user.findUnique({ where: { email: email } });
   }
 
-  async getPaginateUser(limit: number, page: number): Promise<User[]> {
-    return await this.prisma.user.findMany({
+  async getPaginateUser(limit: number, page: number): Promise<PaginateUser> {
+    const paginateUser = await this.prisma.user.findMany({
       skip: (page - 1) * limit,
       take: limit,
       where: { deleted: false },
     });
+    const totalUser: number = await this.prisma.user.count();
+    return {
+      data: paginateUser,
+      total: totalUser,
+      page: page,
+      limit: limit,
+      totalPage: Math.ceil(totalUser / limit),
+    };
   }
 }
