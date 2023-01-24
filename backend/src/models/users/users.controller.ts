@@ -49,6 +49,7 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
+
   @ApiOkResponse({
     type: UserEntity,
     isArray: true,
