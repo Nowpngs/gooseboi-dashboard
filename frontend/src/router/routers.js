@@ -21,4 +21,13 @@ const routes = [
 
 const router = createRouter({ history: createWebHistory(), routes });
 
+router.beforeEach((to, from, next) => {
+  // if the route is not found, redirect to home
+  if (!to.matched.length) {
+    next('/');
+  } else {
+    next();
+  }
+});
+
 export default router;
