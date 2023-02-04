@@ -18,12 +18,12 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
       const payload = {
-        username: this.username,
+        email: this.username,
         password: this.password,
       };
-      login(payload)
+      await login(payload)
         .then((response) => {
           console.log(response);
         })
