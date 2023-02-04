@@ -5,7 +5,7 @@ export const authGuard = (to, from, next) => {
   const token = localStorage.getItem('token');
 
   // if the token is present and not expired, continue to the route
-  if (tokenExpired(token)) {
+  if (token && !tokenExpired(token)) {
     next();
   } else {
     // if the token is not present, redirect to login
