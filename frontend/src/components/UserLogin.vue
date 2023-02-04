@@ -19,13 +19,19 @@ export default {
   },
   methods: {
     async login() {
+      // Create the payload object
       const payload = {
         email: this.username,
         password: this.password,
       };
+      // Call the login function from the API
       await login(payload)
         .then((response) => {
-          console.log(response);
+          // If the call is successful, store the token, email and role in localStorage
+          localStorage.setItem('token', response.data.authorization);
+          localStorage.setItem('role', response.data.data.role);
+          localStorage.setItem('email', response.data.data.email);
+          // Navigate to the Home page
           this.$router.push({ name: 'Home' });
         })
         .catch((error) => {
