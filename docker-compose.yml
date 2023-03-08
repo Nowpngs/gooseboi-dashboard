@@ -7,6 +7,7 @@ services:
     environment:
       - POSTGRES_USER=myuser
       - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=gooseboi-db
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
