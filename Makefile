@@ -15,8 +15,6 @@ init-backend:
 	rm -rf backend/node_modules
 	echo "Installing Backend Dependencies"
 	cd backend && yarn install
-	echo "Starting Backend"
-	cd backend && yarn start:dev
 
 run-backend:
 	echo "Starting Backend"
@@ -27,8 +25,6 @@ init-frontend:
 	rm -rf frontend/node_modules
 	echo "Installing Frontend Dependencies"
 	cd frontend && yarn install
-	echo "Starting Frontend"
-	cd frontend && yarn serve
 
 run-frontend:
 	echo "Starting Frontend"

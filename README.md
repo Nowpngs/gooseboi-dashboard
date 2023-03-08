@@ -2,44 +2,24 @@
 The webapplication for the Gooseboi, the backend were develop on Nestjs and Prisma ORM. The frontend were develop using the Vue.js
 
 ## Setup Project
-1. After clone the project, install all the dependencies for backend
+1. After clone the project, install all the dependencies for backend and frontend
 ```bash
-$ cd backend
-$ npm install
-```
-
-2. Then install all the dependencies for the frontend
-```bash
-$ cd frontend
-$ yarn install
+$ make init-backend
+$ make init-frontend
 ```
 
 ## Running the app
 1. Start up the database
 ```bash
-docker-compose up
+$ make run-db
 ```
 2. Open up new tab in console and run the backend
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ make run-backend
 ```
 3. Then, open another terminal and run the frontend
 ```bash
-# Compiles and hot-reloads for development
-$ yarn serve
-
-# Compiles and minifies for production
-$ yarn build
-
-# # Lints and fixes files
-$ yarn lint
+$ make run-frontend
 ```
 
 ## Web Application Local URL
@@ -71,6 +51,11 @@ npx prisma migrate dev --name "anyname u want"
 ```bash 
 $ cd gooseboi-backend/src/models
 $ npx nest generate resource
+```
+
+### Reset the docker db
+```bash
+$ make reset-db
 ```
 
 ### folder structure reference
